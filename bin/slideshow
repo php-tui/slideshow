@@ -43,7 +43,7 @@ $app = new App(
     DisplayBuilder::default()
         ->addShapeSet(new BdfShapeSet(FontRegistry::default()))
         ->addShapeSet(new ImageMagickShapeSet())
-        ->addShapeSet(new SlideshowSet())
+        ->addWidgetSet(new SlideshowSet())
         ->fullscreen()->build(),
     [
         new Splash(),

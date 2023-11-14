@@ -3,10 +3,11 @@
 namespace PhpTui\Slideshow\Widget;
 
 use PhpTui\Tui\Model\Canvas\ShapeSet;
+use PhpTui\Tui\Model\WidgetSet;
 
-class SlideshowSet implements ShapeSet
+class SlideshowSet implements WidgetSet
 {
-    public function shapes(): array
+    public function renderers(): array
     {
         return [
             new PhpCodeRenderer(),

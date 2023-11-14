@@ -2,6 +2,7 @@
 
 namespace PhpTui\Slideshow\Slide;
 
+use PhpTui\Slideshow\Widget\PhpCode;
 use PhpTui\Term\Event;
 use PhpTui\Term\Event\CharKeyEvent;
 use PhpTui\Term\Event\CodedKeyEvent;
@@ -24,7 +25,6 @@ use PhpTui\Tui\Widget\Grid;
 use PhpTui\Tui\Widget\ItemList;
 use PhpTui\Tui\Widget\ItemList\ItemListState;
 use PhpTui\Tui\Widget\Paragraph;
-use PhpTui\Tui\Widget\PhpCode;
 
 final class CassowarySlide implements Slide
 {
