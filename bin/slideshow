@@ -1,0 +1,223 @@
+#!/usr/bin/env php
+<?php
+
+use PhpTui\Slideshow\Widget\SlideshowSet;
+use PhpTui\Term\Terminal;
+use PhpTui\Tui\Adapter\Bdf\BdfShapeSet;
+use PhpTui\Tui\Adapter\Bdf\FontRegistry;
+use PhpTui\Tui\Adapter\ImageMagick\ImageMagickShapeSet;
+use PhpTui\Tui\Adapter\ImageMagick\Shape\ImageShape;
+use PhpTui\Tui\Adapter\PhpTerm\PhpTermBackend;
+use PhpTui\Slideshow\App;
+use PhpTui\Slideshow\Slide\CassowarySlide;
+use PhpTui\Slideshow\Slide\DefinitionSlide;
+use PhpTui\Slideshow\Slide\FontSlide;
+use PhpTui\Slideshow\Slide\ListAndImageLR;
+use PhpTui\Slideshow\Slide\PargagraphAndImageDT;
+use PhpTui\Slideshow\Slide\RustCodeSlide;
+use PhpTui\Slideshow\Slide\Splash;
+use PhpTui\Slideshow\Slide\TitleAndList;
+use PhpTui\Slideshow\Slide\TitlePargagraphAndImageDT;
+use PhpTui\Tui\DisplayBuilder;
+use PhpTui\Tui\Model\Display;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\VarDumper;
+use Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider;
+use Symfony\Component\VarDumper\Dumper\ContextProvider\CliContextProvider;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Symfony\Component\VarDumper\Dumper\ServerDumper;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$cloner = new VarCloner();
+$dumper = new ServerDumper('tcp://127.0.0.1:9912', new CliDumper(), [
+    'cli' => new CliContextProvider(),
+    'source' => new SourceContextProvider(),
+]);
+
+VarDumper::setHandler(function ($var) use ($cloner, $dumper): void {
+    $dumper->dump($cloner->cloneVar($var));
+});
+$app = new App(
+    Terminal::new(),
+    DisplayBuilder::default()
+        ->addShapeSet(new BdfShapeSet(FontRegistry::default()))
+        ->addShapeSet(new ImageMagickShapeSet())
+        ->addShapeSet(new SlideshowSet())
+        ->fullscreen()->build(),
+    [
+        new Splash(),
+        new PargagraphAndImageDT(
+            ImageShape::fromPath(
+                __DIR__ . '/../assets/warning.jpg'
+            ),
+            title: 'WARNING',
+            text: 'This presentation is made with janky cutting edge software',
+        ),
+        new ListAndImageLR(
+            ImageShape::fromPath(
+                __DIR__ . '/../assets/me.small.JPG'
+            ),
+            title: 'About Me',
+            items: [
+                '- Daniel Leech',
+                '- PHP Developer for 17 years!',
+                '- Phpactor: Language Server',
+                '- PHPBench: Code profiling tool',
+                '- Unemployed! 🎉',
+            ]
+        ),
+        new PargagraphAndImageDT(
+            ImageShape::fromPath(
+                __DIR__ . '/../assets/logo.png'
+            ),
+            title: 'Redundancy',
+            text: 'Since being made redundant 3 weeks ago I have been using my unexpected free time to stat a project that has been in my minds eye for some time: a TUI framework for PHP.',
+        ),
+        new DefinitionSlide(
+            'What is a TUI framework?',
+            'TUI stands for Terminal User Interface. It’s generally for a full screen application that runs in the terminal and is controlled with the keyboard, although it’s also possible for TUIs to use the mouse!',
+        ),
+        new TitlePargagraphAndImageDT(
+            ImageShape::fromPath(
+                __DIR__ . '/../assets/storm.jpg'
+            ),
+            title: 'Redundancy',
+            text: 'It’s a horrible word, and it’s a word that grows heavier the longer I don’t have a job. But the good thing is that I now had plenty of spare time.',
+        ),
+        new PargagraphAndImageDT(
+            ImageShape::fromPath(
+                __DIR__ . '/../assets/ratatui.png'
+            ),
+            title: 'Porting Ratatui from Rust',
+            text: '... and I did what most people do in this situation and decided to port large Rust projects to PHP',
+        ),
+        new ListAndImageLR(
+            ImageShape::fromPath(
+                __DIR__ . '/../assets/ratatuiony.png'
+            ),
+            title: 'Ratatui',
+            items: [
+                '- TUI library for Rust',
+                '- Successor project of Rust TUI',
+                '- Layouts',
+                '- Chats',
+                '- Tables',
+                '- Lists',
+                '- Paragraphs',
+                '- ... easy!?',
+                '- Let\'s look at the ratatui demo!',
+            ]
+        ),
+        new RustCodeSlide(),
+        new TitleAndList(
+            'Cassowary',
+            [
+                '- Ported from Rust\'s cassowary-rs - line for line',
+                '- Which was ported from Java\'s Kiwi Cassowary library',
+                '- Which was based on the paper',
+                '- I spent days debugging it',
+                '- I still don\'t really know how it works! 😛',
+            ],
+            subTitle: 'A constraint solving algorithm for arranging user interfaces',
+        ),
+        new CassowarySlide(
+            title: 'Cassowary',
+            items: []
+        ),
+        new PargagraphAndImageDT(
+            ImageShape::fromPath(
+                __DIR__ . '/../assets/crossterm.jpg'
+            ),
+            title: 'Porting Crossterm!',
+            text: 'I also ported crossterm - which is an abstraction for writing and reading from the console',
+        ),
+        new TitleAndList(
+            'PHP-Term',
+            [
+                '- Sends ANSI escape codes to the terminal',
+                '- Uses STTY and potentially other executables to get term info',
+                '- Reads EVENTS from the terminal',
+            ],
+            'Abstracting the dirty work of reading and writing from TTY',
+        ),
+        new TitleAndList(
+            'Font Rendering!',
+            [
+                '- Stated porting a BDF parser from the embedded Rust project',
+                '- It used parser combinators and I didn\'t want to add a new depdency',
+                '- Wasn\'t actually complicated',
+                '- Wrote my own parser!',
+            ],
+            'What if we could render fonts?!?',
+        ),
+        new FontSlide('BDF Parser', [
+'STARTCHAR e',
+'ENCODING 101',
+'SWIDTH 576 0',
+'DWIDTH 6 0',
+'BBX 6 10 0 -2',
+'BITMAP',
+'00',
+'00',
+'00',
+'70',
+'88',
+'F8',
+'80',
+'70',
+'00',
+'00',
+'ENDCHAR',
+        ], 'BDF fonts are in a plain text format and are easy to parse!'),
+        new TitleAndList(
+            'Widgets!',
+            [
+                '✅ Canvas',
+                '✅ Chat',
+                '✅ Table',
+                '✅ Block',
+                '✅ Paragraph',
+                '✅ List',
+                '✅ Table',
+                '❌ Tabs',
+                '❌ Calendar',
+                '❌ Barchat',
+                '❌ Scrollbar',
+                '❌ Sparkline',
+                '❌ Gauge',
+            ],
+            'The aim is to port all the widgets from Ratatui',
+        ),
+        new TitlePargagraphAndImageDT(
+            ImageShape::fromPath(
+                __DIR__ . '/../assets/me-demo.jpg'
+            ),
+            title: 'Demo',
+            text: 'Let\'s have a look at the demo app!',
+        ),
+        new TitleAndList(
+            'Next Steps',
+            [
+                '- This is a WIP!',
+                '- Fix all the bugs!',
+                '- Fix the performance!',
+                '- Improve design',
+                '- Fix performance issues',
+                '- Publish a package',
+                '- Profit 💰',
+                '- Questions ❓',
+            ]
+        ),
+        new TitleAndList(
+            'More info',
+            [
+                '- Github: github.com/php-tui/php-tui',
+                '- Documentation: php-tui.github.io/php-tui/',
+                '- Blog: www.dantleech.com',
+                '- Masotdon: @dantleech@fosstodon.org',
+            ],
+        ),
+    ]
+);
+$app->run();
