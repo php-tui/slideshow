@@ -3,24 +3,25 @@
 namespace PhpTui\Slideshow\Slide;
 
 use PhpTui\Term\Event;
-use PhpTui\Tui\Adapter\ImageMagick\Shape\ImageShape;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Extension\Core\Widget\Canvas;
+use PhpTui\Tui\Extension\Core\Widget\Paragraph;
+use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
+use PhpTui\Tui\Extension\Core\Widget\Block;
+use PhpTui\Tui\Extension\Core\Widget\Grid;
+use PhpTui\Tui\Extension\ImageMagick\Shape\ImageShape;
+use PhpTui\Tui\Extension\ImageMagick\Widget\ImageWidget;
 use PhpTui\Tui\Model\Constraint;
 use PhpTui\Tui\Model\Direction;
 use PhpTui\Tui\Model\Marker;
 use PhpTui\Tui\Model\Widget;
 use PhpTui\Tui\Model\Widget\HorizontalAlignment;
-use PhpTui\Tui\Widget\Block;
-use PhpTui\Tui\Widget\Block\Padding;
-use PhpTui\Tui\Widget\Canvas;
-use PhpTui\Tui\Widget\Grid;
-use PhpTui\Tui\Widget\Paragraph;
 
 final class PargagraphAndImageDT implements Slide
 {
     public function __construct(
-        private ImageShape $image,
+        private string $image,
         private string $title,
         private string $text,
     ) {
@@ -59,8 +60,6 @@ final class PargagraphAndImageDT implements Slide
 
     private function image(): Widget
     {
-        return Canvas::fromIntBounds(0, 320, 0, 200)
-            ->marker(Marker::HalfBlock)
-            ->draw($this->image);
+        return new ImageWidget($this->image);
     }
 }

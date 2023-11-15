@@ -3,9 +3,11 @@
 namespace PhpTui\Slideshow\Slide;
 
 use PhpTui\Term\Event;
-use PhpTui\Tui\Adapter\Bdf\Shape\TextShape;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
+use PhpTui\Tui\Extension\Core\Shape\Line as PhpTuiLine;
+use PhpTui\Tui\Extension\Core\Widget\Canvas;
 use PhpTui\Tui\Model\AnsiColor;
 use PhpTui\Tui\Model\AxisBounds;
 use PhpTui\Tui\Model\Canvas\CanvasContext;
@@ -13,8 +15,6 @@ use PhpTui\Tui\Model\Style;
 use PhpTui\Tui\Model\Widget;
 use PhpTui\Tui\Model\Widget\FloatPosition;
 use PhpTui\Tui\Model\Widget\Line;
-use PhpTui\Tui\Shape\Line as PhpTuiLine;
-use PhpTui\Tui\Widget\Canvas;
 
 class Splash implements Slide
 {

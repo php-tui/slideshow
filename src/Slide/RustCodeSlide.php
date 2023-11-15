@@ -4,19 +4,19 @@ namespace PhpTui\Slideshow\Slide;
 
 use PhpTui\Slideshow\Widget\PhpCode;
 use PhpTui\Term\Event;
-use PhpTui\Tui\Adapter\Bdf\Shape\TextShape;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
+use PhpTui\Tui\Extension\Core\Widget\Block;
+use PhpTui\Tui\Extension\Core\Widget\Canvas;
+use PhpTui\Tui\Extension\Core\Widget\Grid;
 use PhpTui\Tui\Model\AnsiColor;
 use PhpTui\Tui\Model\Constraint;
 use PhpTui\Tui\Model\Direction;
-use PhpTui\Tui\Model\Widget;
 use PhpTui\Tui\Model\Widget\Borders;
+use PhpTui\Tui\Model\Widget;
 use PhpTui\Tui\Model\Widget\FloatPosition;
 use PhpTui\Tui\Model\Widget\Title;
-use PhpTui\Tui\Widget\Block;
-use PhpTui\Tui\Widget\Canvas;
-use PhpTui\Tui\Widget\Grid;
 
 class RustCodeSlide implements Slide
 {

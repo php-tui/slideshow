@@ -7,10 +7,15 @@ use PhpTui\Term\Event;
 use PhpTui\Term\Event\CharKeyEvent;
 use PhpTui\Term\Event\CodedKeyEvent;
 use PhpTui\Term\KeyCode;
-use PhpTui\Tui\Adapter\Bdf\FontRegistry;
-use PhpTui\Tui\Adapter\Bdf\Shape\TextShape;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Extension\Core\Widget\Paragraph;
+use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
+use PhpTui\Tui\Extension\Core\Widget\Canvas;
+use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
+use PhpTui\Tui\Extension\Core\Widget\Block;
+use PhpTui\Tui\Extension\Core\Widget\Grid;
+use PhpTui\Tui\Extension\Core\Widget\ItemList\ItemListState;
 use PhpTui\Tui\Model\AnsiColor;
 use PhpTui\Tui\Model\Constraint;
 use PhpTui\Tui\Model\Direction;
@@ -18,13 +23,6 @@ use PhpTui\Tui\Model\Widget;
 use PhpTui\Tui\Model\Widget\Borders;
 use PhpTui\Tui\Model\Widget\FloatPosition;
 use PhpTui\Tui\Model\Widget\Title;
-use PhpTui\Tui\Widget\Block;
-use PhpTui\Tui\Widget\Block\Padding;
-use PhpTui\Tui\Widget\Canvas;
-use PhpTui\Tui\Widget\Grid;
-use PhpTui\Tui\Widget\ItemList;
-use PhpTui\Tui\Widget\ItemList\ItemListState;
-use PhpTui\Tui\Widget\Paragraph;
 
 final class CassowarySlide implements Slide
 {
@@ -36,7 +34,9 @@ final class CassowarySlide implements Slide
      * @var ItemList\ItemListState
      */
     private ItemListState $state;
-
+    /**
+     * @param array<int,mixed> $items
+     */
     public function __construct(
         private string $title,
         /**

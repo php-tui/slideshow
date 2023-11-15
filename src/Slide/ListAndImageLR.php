@@ -5,10 +5,17 @@ namespace PhpTui\Slideshow\Slide;
 use PhpTui\Term\Event;
 use PhpTui\Term\Event\CodedKeyEvent;
 use PhpTui\Term\KeyCode;
-use PhpTui\Tui\Adapter\Bdf\Shape\TextShape;
-use PhpTui\Tui\Adapter\ImageMagick\Shape\ImageShape;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
+use PhpTui\Tui\Extension\Core\Widget\Canvas;
+use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
+use PhpTui\Tui\Extension\Core\Widget\ItemList;
+use PhpTui\Tui\Extension\Core\Widget\ItemList\ListItem;
+use PhpTui\Tui\Extension\Core\Widget\Block;
+use PhpTui\Tui\Extension\Core\Widget\Grid;
+use PhpTui\Tui\Extension\Core\Widget\ItemList\ItemListState;
+use PhpTui\Tui\Extension\ImageMagick\Widget\ImageWidget;
 use PhpTui\Tui\Model\AnsiColor;
 use PhpTui\Tui\Model\Constraint;
 use PhpTui\Tui\Model\Direction;
@@ -17,13 +24,6 @@ use PhpTui\Tui\Model\RgbColor;
 use PhpTui\Tui\Model\Style;
 use PhpTui\Tui\Model\Widget;
 use PhpTui\Tui\Model\Widget\FloatPosition;
-use PhpTui\Tui\Widget\Block;
-use PhpTui\Tui\Widget\Block\Padding;
-use PhpTui\Tui\Widget\Canvas;
-use PhpTui\Tui\Widget\Grid;
-use PhpTui\Tui\Widget\ItemList;
-use PhpTui\Tui\Widget\ItemList\ItemListState;
-use PhpTui\Tui\Widget\ItemList\ListItem;
 
 final class ListAndImageLR implements Slide
 {
@@ -33,7 +33,7 @@ final class ListAndImageLR implements Slide
     private ItemListState $state;
 
     public function __construct(
-        private ImageShape $image,
+        private string $image,
         private string $title,
         /**
          * @var string[]
@@ -116,8 +116,6 @@ final class ListAndImageLR implements Slide
 
     private function me(): Widget
     {
-        return Canvas::fromIntBounds(0, 240, 0, 320)
-            ->marker(Marker::HalfBlock)
-            ->draw($this->image);
+        return new ImageWidget($this->image);
     }
 }

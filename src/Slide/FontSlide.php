@@ -5,9 +5,18 @@ namespace PhpTui\Slideshow\Slide;
 use PhpTui\Term\Event;
 use PhpTui\Term\Event\CodedKeyEvent;
 use PhpTui\Term\KeyCode;
-use PhpTui\Tui\Adapter\Bdf\Shape\TextShape;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
+use PhpTui\Tui\Extension\Core\Shape\ClosureShape;
+use PhpTui\Tui\Extension\Core\Widget\ItemList;
+use PhpTui\Tui\Extension\Core\Widget\ItemList\ListItem;
+use PhpTui\Tui\Extension\Core\Widget\Paragraph;
+use PhpTui\Tui\Extension\Core\Widget\Canvas;
+use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
+use PhpTui\Tui\Extension\Core\Widget\Block;
+use PhpTui\Tui\Extension\Core\Widget\Grid;
+use PhpTui\Tui\Extension\Core\Widget\ItemList\ItemListState;
 use PhpTui\Tui\Model\AnsiColor;
 use PhpTui\Tui\Model\Canvas\Painter;
 use PhpTui\Tui\Model\Constraint;
@@ -18,15 +27,6 @@ use PhpTui\Tui\Model\Widget;
 use PhpTui\Tui\Model\Widget\Borders;
 use PhpTui\Tui\Model\Widget\FloatPosition;
 use PhpTui\Tui\Model\Widget\Line;
-use PhpTui\Tui\Shape\ClosureShape;
-use PhpTui\Tui\Widget\Block;
-use PhpTui\Tui\Widget\Block\Padding;
-use PhpTui\Tui\Widget\Canvas;
-use PhpTui\Tui\Widget\Grid;
-use PhpTui\Tui\Widget\ItemList;
-use PhpTui\Tui\Widget\ItemList\ItemListState;
-use PhpTui\Tui\Widget\ItemList\ListItem;
-use PhpTui\Tui\Widget\Paragraph;
 
 final class FontSlide implements Slide
 {
@@ -71,7 +71,7 @@ final class FontSlide implements Slide
                     ->constraints(
                         Constraint::percentage(10),
                         Constraint::percentage(10),
-                        Constraint::percentage(80)
+                        Constraint::percentage(80),
                     )
                     ->widgets(
                         Canvas::fromIntBounds(0, 56, 0, 7)
