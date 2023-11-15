@@ -5,7 +5,10 @@ namespace PhpTui\Slideshow;
 use PhpTui\Term\Actions;
 use PhpTui\Term\Event\CharKeyEvent;
 use PhpTui\Term\Event\CodedKeyEvent;
+use PhpTui\Term\Event\MouseEvent;
 use PhpTui\Term\KeyCode;
+use PhpTui\Term\MouseButton;
+use PhpTui\Term\MouseEventKind;
 use PhpTui\Term\Terminal;
 use PhpTui\Tui\Extension\Core\Widget\Paragraph;
 use PhpTui\Tui\Extension\Core\Widget\Grid;
@@ -47,26 +50,30 @@ class App
         $this->terminal->enableRawMode();
         $this->terminal->execute(Actions::cursorHide());
         $this->terminal->execute(Actions::alternateScreenEnable());
+        $this->terminal->execute(Actions::enableMouseCapture());
 
         while (true) {
             $this->currentSlide()->handle(new Tick());
             while (null !== $event = $this->terminal->events()->next()) {
+                if ($event instanceof MouseEvent) {
+                    if ($event->kind === MouseEventKind::Down) {
+                        if ($event->button === MouseButton::Left) {
+                            $this->nextSlide();
+                        }
+                        if ($event->button === MouseButton::Right) {
+                            $this->previousSlide();
+                        }
+                    }
+                }
                 if ($event instanceof CodedKeyEvent) {
                     if ($event->code === KeyCode::Left) {
-                        $this->display->clear();
-                        $this->selected = max(0, $this->selected - 1);
+                        $this->previousSlide();
                     }
                     if ($event->code === KeyCode::Right) {
-                        $this->display->clear();
-                        $this->selected = min(count($this->slides) - 1, $this->selected + 1);
+                        $this->nextSlide();
                     }
                     if ($event->code === KeyCode::Esc) {
                         break 2;
-                    }
-                }
-                if ($event instanceof CharKeyEvent) {
-                    if ($event->char === 'r') {
-                        $this->display->clear();
                     }
                 }
                 $this->currentSlide()->handle($event);
@@ -114,5 +121,15 @@ class App
                     $this->currentSlide()->title(),
                 ))->alignment(HorizontalAlignment::Right),
             );
+    }
+
+    private function previousSlide(): mixed
+    {
+        return $this->selected = max(0, $this->selected - 1);
+    }
+
+    private function nextSlide(): mixed
+    {
+        return $this->selected = min(count($this->slides) - 1, $this->selected + 1);
     }
 }
