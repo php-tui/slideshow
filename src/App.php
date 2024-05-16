@@ -10,13 +10,15 @@ use PhpTui\Term\KeyCode;
 use PhpTui\Term\MouseButton;
 use PhpTui\Term\MouseEventKind;
 use PhpTui\Term\Terminal;
+use PhpTui\Tui\Display\Display;
+use PhpTui\Tui\Extension\Core\Widget\GridWidget;
 use PhpTui\Tui\Extension\Core\Widget\Paragraph;
 use PhpTui\Tui\Extension\Core\Widget\Grid;
-use PhpTui\Tui\Model\Constraint;
-use PhpTui\Tui\Model\Direction;
-use PhpTui\Tui\Model\Display;
-use PhpTui\Tui\Model\Widget;
-use PhpTui\Tui\Model\Widget\HorizontalAlignment;
+use PhpTui\Tui\Extension\Core\Widget\ParagraphWidget;
+use PhpTui\Tui\Layout\Constraint;
+use PhpTui\Tui\Widget\HorizontalAlignment;
+use PhpTui\Tui\Widget\Direction;
+use PhpTui\Tui\Widget\Widget;
 use Throwable;
 
 class App
@@ -79,7 +81,7 @@ class App
                 $this->currentSlide()->handle($event);
             }
             $this->display->draw(
-                Grid::default()
+                GridWidget::default()
                     ->constraints(
                         Constraint::min(10),
                         Constraint::max(1),
@@ -105,18 +107,18 @@ class App
 
     private function footer(): Widget
     {
-        return Grid::default()
+        return GridWidget::default()
             ->direction(Direction::Horizontal)
             ->constraints(
                 Constraint::percentage(50),
                 Constraint::percentage(50),
             )->widgets(
-                Paragraph::fromString(sprintf(
+                ParagraphWidget::fromString(sprintf(
                     '%s/%s',
                     $this->selected + 1,
                     count($this->slides),
                 )),
-                Paragraph::fromString(sprintf(
+                ParagraphWidget::fromString(sprintf(
                     '%s',
                     $this->currentSlide()->title(),
                 ))->alignment(HorizontalAlignment::Right),

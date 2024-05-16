@@ -7,11 +7,10 @@ use PhpTui\Tui\Color\RgbColor;
 use PhpTui\Tui\Display\Area;
 use PhpTui\Tui\Display\Buffer;
 use PhpTui\Tui\Position\Position;
+use PhpTui\Tui\Style\Style;
+use PhpTui\Tui\Text\Span;
 use PhpTui\Tui\Widget\Widget;
-use PhpTui\Tui\Widget\Span;
-use PhpTui\Tui\Widget\Widget as PhpTuiWidget;
 use PhpTui\Tui\Widget\WidgetRenderer;
-use UnitEnumCase;
 
 class PhpCodeRenderer implements WidgetRenderer
 {

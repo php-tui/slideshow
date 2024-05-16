@@ -34,11 +34,8 @@ final class CassowarySlide implements Slide
     private int $mainPercentage = 50;
 
     private int $headerLength = 2;
-
-    /**
-     * @var ItemList\ItemListState
-     */
     private ListState $state;
+
     /**
      * @param array<int,mixed> $items
      */

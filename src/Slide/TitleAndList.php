@@ -16,6 +16,7 @@ use PhpTui\Tui\Extension\Core\Widget\GridWidget;
 use PhpTui\Tui\Extension\Core\Widget\ItemList;
 use PhpTui\Tui\Extension\Core\Widget\ItemList\ListItem;
 use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
+use PhpTui\Tui\Extension\Core\Widget\ListWidget;
 use PhpTui\Tui\Extension\Core\Widget\List\ListItem as PhpTuiListItem;
 use PhpTui\Tui\Extension\Core\Widget\List\ListState;
 use PhpTui\Tui\Extension\Core\Widget\Block;
@@ -95,8 +96,8 @@ final class TitleAndList implements Slide
 
     private function text(): Widget
     {
-        return Block::default()->padding(Padding::all(10))->widget(
-            ItemList::default()
+        return BlockWidget::default()->padding(Padding::all(10))->widget(
+            ListWidget::default()
             ->select(0)
             ->highlightSymbol('')
             ->highlightStyle(Style::default()->fg(AnsiColor::White))

@@ -12,6 +12,7 @@ use PhpTui\Tui\Extension\Core\Widget\Paragraph;
 use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
 use PhpTui\Tui\Extension\Core\Widget\Block;
 use PhpTui\Tui\Extension\Core\Widget\Grid;
+use PhpTui\Tui\Extension\Core\Widget\ParagraphWidget;
 use PhpTui\Tui\Extension\ImageMagick\Shape\ImageShape;
 use PhpTui\Tui\Extension\ImageMagick\Widget\ImageWidget;
 use PhpTui\Tui\Layout\Constraint;
@@ -56,7 +57,7 @@ final class PargagraphAndImageDT implements Slide
 
     private function text(): Widget
     {
-        return Paragraph::fromString($this->text)->alignment(HorizontalAlignment::Center);
+        return ParagraphWidget::fromString($this->text)->alignment(HorizontalAlignment::Center);
     }
 
     private function image(): Widget
