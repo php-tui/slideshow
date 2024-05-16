@@ -54,10 +54,8 @@ $app = new App(
             title: 'About Me',
             items: [
                 '- Daniel Leech',
-                '- PHP Developer for 17 years!',
                 '- Phpactor: Language Server',
                 '- PHPBench: Code profiling tool',
-                '- Unemployed! 🎉',
             ]
         ),
         new PargagraphAndImageDT(
