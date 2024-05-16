@@ -5,16 +5,17 @@ namespace PhpTui\Slideshow\Slide;
 use PhpTui\Term\Event;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Canvas\CanvasContext;
+use PhpTui\Tui\Color\AnsiColor;
 use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
-use PhpTui\Tui\Extension\Core\Shape\Line as PhpTuiLine;
+use PhpTui\Tui\Extension\Core\Shape\LineShape;
 use PhpTui\Tui\Extension\Core\Widget\Canvas;
-use PhpTui\Tui\Model\AnsiColor;
-use PhpTui\Tui\Model\AxisBounds;
-use PhpTui\Tui\Model\Canvas\CanvasContext;
-use PhpTui\Tui\Model\Style;
-use PhpTui\Tui\Model\Widget;
-use PhpTui\Tui\Model\Widget\FloatPosition;
-use PhpTui\Tui\Model\Widget\Line;
+use PhpTui\Tui\Extension\Core\Widget\CanvasWidget;
+use PhpTui\Tui\Extension\Core\Widget\Chart\AxisBounds;
+use PhpTui\Tui\Position\FloatPosition;
+use PhpTui\Tui\Style\Style;
+use PhpTui\Tui\Text\Line;
+use PhpTui\Tui\Widget\Widget;
 
 class Splash implements Slide
 {
@@ -25,7 +26,7 @@ class Splash implements Slide
 
     public function build(): Widget
     {
-        return Canvas::default()
+        return CanvasWidget::default()
             ->xBounds(AxisBounds::new(0, 320))
             ->yBounds(AxisBounds::new(0, 240))
             ->paint(function (CanvasContext $context): void {
@@ -47,7 +48,7 @@ class Splash implements Slide
                 );
                 $context->draw($title);
                 $context->draw($subTitle);
-                $context->draw(PhpTuiLine::fromScalars(0, 160, 320, 160)->color(AnsiColor::Gray));
+                $context->draw(LineShape::fromScalars(0, 160, 320, 160)->color(AnsiColor::Gray));
                 $context->print(12, 140, Line::fromString('Daniel Leech 2024'));
                 $context->print(12, 130, Line::fromString('@dantleech@fosstodon.org')->patchStyle(Style::default()->fg(AnsiColor::LightMagenta)));
                 $context->print(12, 120, Line::fromString('https://www.dantleech.com')->patchStyle(Style::default()->fg(AnsiColor::LightYellow)));

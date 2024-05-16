@@ -2,7 +2,8 @@
 
 namespace PhpTui\Slideshow\Widget;
 
-use PhpTui\Tui\Model\Widget;
+use PhpTui\Tui\Widget\Widget;
+
 
 class PhpCode implements Widget
 {

@@ -7,26 +7,32 @@ use PhpTui\Term\Event\CodedKeyEvent;
 use PhpTui\Term\KeyCode;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Canvas\Painter;
+use PhpTui\Tui\Color\AnsiColor;
+use PhpTui\Tui\Color\RgbColor;
 use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
 use PhpTui\Tui\Extension\Core\Shape\ClosureShape;
+use PhpTui\Tui\Extension\Core\Widget\BlockWidget;
+use PhpTui\Tui\Extension\Core\Widget\CanvasWidget;
+use PhpTui\Tui\Extension\Core\Widget\GridWidget;
 use PhpTui\Tui\Extension\Core\Widget\ItemList;
-use PhpTui\Tui\Extension\Core\Widget\ItemList\ListItem;
+use PhpTui\Tui\Extension\Core\Widget\ListWidget;
+use PhpTui\Tui\Extension\Core\Widget\List\ListItem;
+use PhpTui\Tui\Extension\Core\Widget\List\ListState;
 use PhpTui\Tui\Extension\Core\Widget\Paragraph;
 use PhpTui\Tui\Extension\Core\Widget\Canvas;
 use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
 use PhpTui\Tui\Extension\Core\Widget\Block;
 use PhpTui\Tui\Extension\Core\Widget\Grid;
 use PhpTui\Tui\Extension\Core\Widget\ItemList\ItemListState;
-use PhpTui\Tui\Model\AnsiColor;
-use PhpTui\Tui\Model\Canvas\Painter;
-use PhpTui\Tui\Model\Constraint;
-use PhpTui\Tui\Model\Direction;
-use PhpTui\Tui\Model\RgbColor;
-use PhpTui\Tui\Model\Style;
-use PhpTui\Tui\Model\Widget;
-use PhpTui\Tui\Model\Widget\Borders;
-use PhpTui\Tui\Model\Widget\FloatPosition;
-use PhpTui\Tui\Model\Widget\Line;
+use PhpTui\Tui\Extension\Core\Widget\ParagraphWidget;
+use PhpTui\Tui\Layout\Constraint;
+use PhpTui\Tui\Position\FloatPosition;
+use PhpTui\Tui\Style\Style;
+use PhpTui\Tui\Text\Line;
+use PhpTui\Tui\Widget\Borders;
+use PhpTui\Tui\Widget\Direction;
+use PhpTui\Tui\Widget\Widget;
 
 final class FontSlide implements Slide
 {
@@ -37,7 +43,7 @@ final class FontSlide implements Slide
     /**
      * @var ItemList\ItemListState
      */
-    private ItemListState $state;
+    private ListState $state;
 
     public function __construct(
         private string $title,
@@ -47,7 +53,7 @@ final class FontSlide implements Slide
         private array $items,
         private string $subTitle,
     ) {
-        $this->state = new ItemListState();
+        $this->state = new ListState();
     }
     public function title(): string
     {
@@ -56,17 +62,17 @@ final class FontSlide implements Slide
 
     public function build(): Widget
     {
-        return Grid::default()
+        return GridWidget::default()
             ->direction(Direction::Horizontal)
             ->constraints(
                 Constraint::percentage(50),
                 Constraint::percentage(50),
             )
             ->widgets(
-                Block::default()
+                BlockWidget::default()
                 ->padding(Padding::fromScalars(1, 1, 1, 1))
                 ->widget(
-                    Grid::default()
+                    GridWidget::default()
                     ->direction(Direction::Vertical)
                     ->constraints(
                         Constraint::percentage(10),
@@ -74,7 +80,7 @@ final class FontSlide implements Slide
                         Constraint::percentage(80),
                     )
                     ->widgets(
-                        Canvas::fromIntBounds(0, 56, 0, 7)
+                        CanvasWidget::fromIntBounds(0, 56, 0, 7)
                             ->draw(
                                 new TextShape(
                                     'default',
@@ -85,7 +91,7 @@ final class FontSlide implements Slide
                                     scaleY: 1,
                                 ),
                             ),
-                        Block::default()->padding(Padding::all(1))->widget(Paragraph::fromString($this->subTitle)),
+                        BlockWidget::default()->padding(Padding::all(1))->widget(ParagraphWidget::fromString($this->subTitle)),
                         $this->text(),
                     )
                 ),
@@ -111,8 +117,8 @@ final class FontSlide implements Slide
 
     private function text(): Widget
     {
-        return Block::default()->padding(Padding::fromScalars(5, 5, 5, 5))->widget(
-            ItemList::default()
+        return BlockWidget::default()->padding(Padding::fromScalars(5, 5, 5, 5))->widget(
+            ListWidget::default()
             ->select(0)
             ->highlightSymbol('')
             ->highlightStyle(Style::default()->fg(AnsiColor::White))
@@ -128,8 +134,8 @@ final class FontSlide implements Slide
 
     private function diagram(): Widget
     {
-        return Block::default()->borders(Borders::ALL)->widget(
-        Canvas::fromIntBounds(0, 6, 0, 6)
+        return BlockWidget::default()->borders(Borders::ALL)->widget(
+        CanvasWidget::fromIntBounds(0, 6, 0, 6)
             ->draw(new ClosureShape(function (Painter $painter): void {
                 for ($x = 0; $x < 6; $x++) {
                     $painter->context->print($x, 0, Line::fromString((string)($x + 1)));

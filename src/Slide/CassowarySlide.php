@@ -9,6 +9,11 @@ use PhpTui\Term\Event\CodedKeyEvent;
 use PhpTui\Term\KeyCode;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Color\AnsiColor;
+use PhpTui\Tui\Extension\Core\Widget\BlockWidget;
+use PhpTui\Tui\Extension\Core\Widget\CanvasWidget;
+use PhpTui\Tui\Extension\Core\Widget\GridWidget;
+use PhpTui\Tui\Extension\Core\Widget\List\ListState;
 use PhpTui\Tui\Extension\Core\Widget\Paragraph;
 use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
 use PhpTui\Tui\Extension\Core\Widget\Canvas;
@@ -16,13 +21,13 @@ use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
 use PhpTui\Tui\Extension\Core\Widget\Block;
 use PhpTui\Tui\Extension\Core\Widget\Grid;
 use PhpTui\Tui\Extension\Core\Widget\ItemList\ItemListState;
-use PhpTui\Tui\Model\AnsiColor;
-use PhpTui\Tui\Model\Constraint;
-use PhpTui\Tui\Model\Direction;
-use PhpTui\Tui\Model\Widget;
-use PhpTui\Tui\Model\Widget\Borders;
-use PhpTui\Tui\Model\Widget\FloatPosition;
-use PhpTui\Tui\Model\Widget\Title;
+use PhpTui\Tui\Extension\Core\Widget\ParagraphWidget;
+use PhpTui\Tui\Layout\Constraint;
+use PhpTui\Tui\Position\FloatPosition;
+use PhpTui\Tui\Text\Title;
+use PhpTui\Tui\Widget\Borders;
+use PhpTui\Tui\Widget\Direction;
+use PhpTui\Tui\Widget\Widget;
 
 final class CassowarySlide implements Slide
 {
@@ -33,7 +38,7 @@ final class CassowarySlide implements Slide
     /**
      * @var ItemList\ItemListState
      */
-    private ItemListState $state;
+    private ListState $state;
     /**
      * @param array<int,mixed> $items
      */
@@ -44,7 +49,7 @@ final class CassowarySlide implements Slide
          */
         private array $items,
     ) {
-        $this->state = new ItemListState();
+        $this->state = new ListState();
     }
     public function title(): string
     {
@@ -53,21 +58,21 @@ final class CassowarySlide implements Slide
 
     public function build(): Widget
     {
-        return Grid::default()
+        return GridWidget::default()
             ->direction(Direction::Horizontal)
             ->constraints(
                 Constraint::percentage(50),
                 Constraint::percentage(50),
             )
             ->widgets(
-                Block::default()
+                BlockWidget::default()
                 ->padding(Padding::fromScalars(1, 1, 1, 1))
                 ->widget(
-                    Grid::default()
+                    GridWidget::default()
                     ->direction(Direction::Vertical)
                     ->constraints(Constraint::percentage(10), Constraint::percentage(90))
                     ->widgets(
-                        Canvas::fromIntBounds(0, 56, 0, 6)
+                        CanvasWidget::fromIntBounds(0, 56, 0, 6)
                             ->draw(
                                 new TextShape(
                                     'default',
@@ -107,7 +112,7 @@ final class CassowarySlide implements Slide
 
     private function text(): Widget
     {
-        return Block::default()->padding(Padding::fromScalars(5, 5, 5, 5))->widget(
+        return BlockWidget::default()->padding(Padding::fromScalars(5, 5, 5, 5))->widget(
             new PhpCode(sprintf(
                 <<<'EOT'
                     Grid::default()
@@ -149,34 +154,34 @@ final class CassowarySlide implements Slide
 
     private function cassowary(): Widget
     {
-        return Grid::default()
+        return GridWidget::default()
             ->constraints(
                 Constraint::length($this->headerLength),
                 Constraint::min(2),
                 Constraint::length($this->headerLength),
             )
             ->widgets(
-                Block::default()->borders(Borders::ALL)->titles(Title::fromString('Header')),
-                Grid::default()
+                BlockWidget::default()->borders(Borders::ALL)->titles(Title::fromString('Header')),
+                GridWidget::default()
                     ->direction(Direction::Horizontal)
                     ->constraints(
                         Constraint::percentage($this->mainPercentage),
                         Constraint::min(1)
                     )
                     ->widgets(
-                        Block::default()->borders(Borders::ALL)->titles(
+                        BlockWidget::default()->borders(Borders::ALL)->titles(
                             Title::fromString('Main Content')
                         )->widget(
-                            Paragraph::fromString(
+                            ParagraphWidget::fromString(
                                 sprintf(
                                     '%s%% use + and - to  adjust',
                                     $this->mainPercentage
                                 )
                             )
                         ),
-                        Block::default()->borders(Borders::ALL)->titles(Title::fromString('Sidebar'))
+                        BlockWidget::default()->borders(Borders::ALL)->titles(Title::fromString('Sidebar'))
                     ),
-                Block::default()->borders(Borders::ALL)->titles(Title::fromString('Footer')),
+                BlockWidget::default()->borders(Borders::ALL)->titles(Title::fromString('Footer')),
             );
     }
 }

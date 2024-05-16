@@ -7,30 +7,33 @@ use PhpTui\Term\Event\CodedKeyEvent;
 use PhpTui\Term\KeyCode;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Color\AnsiColor;
+use PhpTui\Tui\Color\RgbColor;
 use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
+use PhpTui\Tui\Extension\Core\Widget\BlockWidget;
 use PhpTui\Tui\Extension\Core\Widget\Canvas;
 use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
-use PhpTui\Tui\Extension\Core\Widget\ItemList;
-use PhpTui\Tui\Extension\Core\Widget\ItemList\ListItem;
+use PhpTui\Tui\Extension\Core\Widget\CanvasWidget;
+use PhpTui\Tui\Extension\Core\Widget\GridWidget;
+use PhpTui\Tui\Extension\Core\Widget\List;
+use PhpTui\Tui\Extension\Core\Widget\ListWidget;
+use PhpTui\Tui\Extension\Core\Widget\List\ListItem;
 use PhpTui\Tui\Extension\Core\Widget\Block;
 use PhpTui\Tui\Extension\Core\Widget\Grid;
-use PhpTui\Tui\Extension\Core\Widget\ItemList\ItemListState;
+use PhpTui\Tui\Extension\Core\Widget\List\ListState;
 use PhpTui\Tui\Extension\ImageMagick\Widget\ImageWidget;
-use PhpTui\Tui\Model\AnsiColor;
-use PhpTui\Tui\Model\Constraint;
-use PhpTui\Tui\Model\Direction;
-use PhpTui\Tui\Model\Marker;
-use PhpTui\Tui\Model\RgbColor;
-use PhpTui\Tui\Model\Style;
-use PhpTui\Tui\Model\Widget;
-use PhpTui\Tui\Model\Widget\FloatPosition;
+use PhpTui\Tui\Layout\Constraint;
+use PhpTui\Tui\Position\FloatPosition;
+use PhpTui\Tui\Style\Style;
+use PhpTui\Tui\Widget\Direction;
+use PhpTui\Tui\Widget\Widget;
 
 final class ListAndImageLR implements Slide
 {
     /**
-     * @var ItemList\ItemListState
+     * @var List\ListState
      */
-    private ItemListState $state;
+    private ListState $state;
 
     public function __construct(
         private string $image,
@@ -40,7 +43,7 @@ final class ListAndImageLR implements Slide
          */
         private array $items,
     ) {
-        $this->state = new ItemListState();
+        $this->state = new ListState();
     }
     public function title(): string
     {
@@ -49,21 +52,21 @@ final class ListAndImageLR implements Slide
 
     public function build(): Widget
     {
-        return Grid::default()
+        return GridWidget::default()
             ->direction(Direction::Horizontal)
             ->constraints(
                 Constraint::percentage(50),
                 Constraint::percentage(50),
             )
             ->widgets(
-                Block::default()
+                BlockWidget::default()
                 ->padding(Padding::fromScalars(1, 1, 1, 1))
                 ->widget(
-                    Grid::default()
+                    GridWidget::default()
                     ->direction(Direction::Vertical)
                     ->constraints(Constraint::percentage(10), Constraint::percentage(90))
                     ->widgets(
-                        Canvas::fromIntBounds(0, 56, 0, 6)
+                        CanvasWidget::fromIntBounds(0, 56, 0, 6)
                             ->draw(
                                 new TextShape(
                                     'default',
@@ -99,8 +102,8 @@ final class ListAndImageLR implements Slide
 
     private function text(): Widget
     {
-        return Block::default()->padding(Padding::fromScalars(5, 5, 5, 5))->widget(
-            ItemList::default()
+        return BlockWidget::default()->padding(Padding::fromScalars(5, 5, 5, 5))->widget(
+            ListWidget::default()
             ->select(0)
             ->highlightSymbol('')
             ->highlightStyle(Style::default()->fg(AnsiColor::White))

@@ -2,15 +2,15 @@
 
 namespace PhpTui\Slideshow\Widget;
 
-use PhpTui\Tui\Model\AnsiColor;
-use PhpTui\Tui\Model\Area;
-use PhpTui\Tui\Model\Buffer;
-use PhpTui\Tui\Model\Position;
-use PhpTui\Tui\Model\RgbColor;
-use PhpTui\Tui\Model\Style;
-use PhpTui\Tui\Model\Widget;
-use PhpTui\Tui\Model\WidgetRenderer;
-use PhpTui\Tui\Model\Widget\Span;
+use PhpTui\Tui\Color\AnsiColor;
+use PhpTui\Tui\Color\RgbColor;
+use PhpTui\Tui\Display\Area;
+use PhpTui\Tui\Display\Buffer;
+use PhpTui\Tui\Position\Position;
+use PhpTui\Tui\Widget\Widget;
+use PhpTui\Tui\Widget\Span;
+use PhpTui\Tui\Widget\Widget as PhpTuiWidget;
+use PhpTui\Tui\Widget\WidgetRenderer;
 use UnitEnumCase;
 
 class PhpCodeRenderer implements WidgetRenderer
@@ -32,7 +32,7 @@ class PhpCodeRenderer implements WidgetRenderer
             'T_WHITESPACE' => AnsiColor::Reset,
         ];
     }
-    public function render(WidgetRenderer $renderer, Widget $widget, Area $area, Buffer $buffer): void
+    public function render(WidgetRenderer $renderer, Widget $widget, Buffer $buffer, Area $area): void
     {
         if (!$widget instanceof PhpCode) {
             return;

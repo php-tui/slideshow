@@ -7,21 +7,24 @@ use PhpTui\Term\Event\CodedKeyEvent;
 use PhpTui\Term\KeyCode;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Color\AnsiColor;
+use PhpTui\Tui\Color\RgbColor;
 use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
+use PhpTui\Tui\Extension\Core\Widget\BlockWidget;
+use PhpTui\Tui\Extension\Core\Widget\CanvasWidget;
+use PhpTui\Tui\Extension\Core\Widget\GridWidget;
 use PhpTui\Tui\Extension\Core\Widget\Paragraph;
 use PhpTui\Tui\Extension\Core\Widget\Canvas;
 use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
 use PhpTui\Tui\Extension\Core\Widget\Block;
 use PhpTui\Tui\Extension\Core\Widget\Grid;
-use PhpTui\Tui\Model\AnsiColor;
-use PhpTui\Tui\Model\Constraint;
-use PhpTui\Tui\Model\Direction;
-use PhpTui\Tui\Model\Marker;
-use PhpTui\Tui\Model\RgbColor;
-use PhpTui\Tui\Model\Style;
-use PhpTui\Tui\Model\Widget;
-use PhpTui\Tui\Model\Widget\FloatPosition;
-use PhpTui\Tui\Model\Widget\HorizontalAlignment;
+use PhpTui\Tui\Extension\Core\Widget\ParagraphWidget;
+use PhpTui\Tui\Layout\Constraint;
+use PhpTui\Tui\Position\FloatPosition;
+use PhpTui\Tui\Style\Style;
+use PhpTui\Tui\Widget\Direction;
+use PhpTui\Tui\Widget\HorizontalAlignment;
+use PhpTui\Tui\Widget\Widget;
 
 final class DefinitionSlide implements Slide
 {
@@ -39,17 +42,17 @@ final class DefinitionSlide implements Slide
 
     public function build(): Widget
     {
-        return Grid::default()
+        return GridWidget::default()
             ->direction(Direction::Vertical)
             ->constraints(
                 Constraint::percentage(40),
                 Constraint::percentage(60),
             )
             ->widgets(
-                Block::default()
+                BlockWidget::default()
                 ->padding(Padding::fromScalars(1, 1, 1, 1))
                 ->widget(
-                    Canvas::fromIntBounds(0, 200, 0, 50)
+                    CanvasWidget::fromIntBounds(0, 200, 0, 50)
                             ->draw(
                                 new TextShape(
                                     'default',
@@ -61,7 +64,7 @@ final class DefinitionSlide implements Slide
                                 ),
                             ),
                 ),
-                Block::default()
+                BlockWidget::default()
                 ->padding(Padding::all(5))
                 ->widget(
                     $this->text(),
@@ -80,7 +83,7 @@ final class DefinitionSlide implements Slide
 
     private function text(): Widget
     {
-        return Paragraph::fromString(
+        return ParagraphWidget::fromString(
             $this->text
         )->alignment(HorizontalAlignment::Center)->style(
             Style::default()->fg($this->highlight ? AnsiColor::White : RgbColor::fromRgb(100, 100, 100))

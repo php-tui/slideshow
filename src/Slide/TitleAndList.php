@@ -7,30 +7,34 @@ use PhpTui\Term\Event\CodedKeyEvent;
 use PhpTui\Term\KeyCode;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Canvas\CanvasContext;
+use PhpTui\Tui\Color\AnsiColor;
+use PhpTui\Tui\Color\RgbColor;
+use PhpTui\Tui\Extension\Core\Widget\BlockWidget;
+use PhpTui\Tui\Extension\Core\Widget\CanvasWidget;
+use PhpTui\Tui\Extension\Core\Widget\GridWidget;
 use PhpTui\Tui\Extension\Core\Widget\ItemList;
 use PhpTui\Tui\Extension\Core\Widget\ItemList\ListItem;
 use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
-use PhpTui\Tui\Extension\Core\Widget\Paragraph;
+use PhpTui\Tui\Extension\Core\Widget\List\ListItem as PhpTuiListItem;
+use PhpTui\Tui\Extension\Core\Widget\List\ListState;
 use PhpTui\Tui\Extension\Core\Widget\Block;
 use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
 use PhpTui\Tui\Extension\Core\Widget\Canvas;
 use PhpTui\Tui\Extension\Core\Widget\Grid;
-use PhpTui\Tui\Extension\Core\Widget\ItemList\ItemListState;
-use PhpTui\Tui\Model\AnsiColor;
-use PhpTui\Tui\Model\Canvas\CanvasContext;
-use PhpTui\Tui\Model\Constraint;
-use PhpTui\Tui\Model\Direction;
-use PhpTui\Tui\Model\RgbColor;
-use PhpTui\Tui\Model\Style;
-use PhpTui\Tui\Model\Widget;
-use PhpTui\Tui\Model\Widget\FloatPosition;
+use PhpTui\Tui\Extension\Core\Widget\ParagraphWidget;
+use PhpTui\Tui\Layout\Constraint;
+use PhpTui\Tui\Position\FloatPosition;
+use PhpTui\Tui\Style\Style;
+use PhpTui\Tui\Widget\Direction;
+use PhpTui\Tui\Widget\Widget;
 
 final class TitleAndList implements Slide
 {
     /**
      * @var ItemList\ItemListState
      */
-    private ItemListState $state;
+    private ListState $state;
 
     public function __construct(
         private string $title,
@@ -40,7 +44,7 @@ final class TitleAndList implements Slide
         private array $items,
         private string $subTitle = '',
     ) {
-        $this->state = new ItemListState();
+        $this->state = new ListState();
     }
     public function title(): string
     {
@@ -49,7 +53,7 @@ final class TitleAndList implements Slide
 
     public function build(): Widget
     {
-        return Grid::default()
+        return GridWidget::default()
             ->direction(Direction::Vertical)
             ->constraints(
                 Constraint::length(6),
@@ -57,7 +61,7 @@ final class TitleAndList implements Slide
                 Constraint::min(10),
             )
             ->widgets(
-                Canvas::fromIntBounds(0, 80, 0, 10)
+                CanvasWidget::fromIntBounds(0, 80, 0, 10)
                     ->paint(function (CanvasContext $context) {
                         $context->draw(new TextShape(
                             'default',
@@ -68,7 +72,7 @@ final class TitleAndList implements Slide
                             scaleY: 1,
                         ));
                     }),
-                Block::default()->padding(Padding::all(1))->widget(Paragraph::fromString($this->subTitle)),
+                BlockWidget::default()->padding(Padding::all(1))->widget(ParagraphWidget::fromString($this->subTitle)),
                 $this->text(),
             );
     }
@@ -98,7 +102,7 @@ final class TitleAndList implements Slide
             ->highlightStyle(Style::default()->fg(AnsiColor::White))
             ->state($this->state)
             ->items(...array_map(
-                fn (string $item) => ListItem::fromString($item)->style(
+                fn (string $item) => PhpTuiListItem::fromString($item)->style(
                     $this->state->selected < count($this->items) ?
                         Style::default()->fg(RgbColor::fromRgb(100, 100, 100)) :
                         Style::default()->fg(AnsiColor::White)

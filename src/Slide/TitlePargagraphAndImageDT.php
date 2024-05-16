@@ -5,21 +5,24 @@ namespace PhpTui\Slideshow\Slide;
 use PhpTui\Term\Event;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Color\AnsiColor;
+use PhpTui\Tui\Extension\Core\Widget\BlockWidget;
+use PhpTui\Tui\Extension\Core\Widget\CanvasWidget;
+use PhpTui\Tui\Extension\Core\Widget\GridWidget;
 use PhpTui\Tui\Extension\Core\Widget\Paragraph;
 use PhpTui\Tui\Extension\Core\Widget\Block\Padding;
 use PhpTui\Tui\Extension\Core\Widget\Block;
 use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
 use PhpTui\Tui\Extension\Core\Widget\Canvas;
 use PhpTui\Tui\Extension\Core\Widget\Grid;
+use PhpTui\Tui\Extension\Core\Widget\ParagraphWidget;
 use PhpTui\Tui\Extension\ImageMagick\Shape\ImageShape;
 use PhpTui\Tui\Extension\ImageMagick\Widget\ImageWidget;
-use PhpTui\Tui\Model\AnsiColor;
-use PhpTui\Tui\Model\Constraint;
-use PhpTui\Tui\Model\Direction;
-use PhpTui\Tui\Model\Marker;
-use PhpTui\Tui\Model\Widget;
-use PhpTui\Tui\Model\Widget\FloatPosition;
-use PhpTui\Tui\Model\Widget\HorizontalAlignment;
+use PhpTui\Tui\Layout\Constraint;
+use PhpTui\Tui\Position\FloatPosition;
+use PhpTui\Tui\Widget\Direction;
+use PhpTui\Tui\Widget\HorizontalAlignment;
+use PhpTui\Tui\Widget\Widget;
 
 final class TitlePargagraphAndImageDT implements Slide
 {
@@ -36,7 +39,7 @@ final class TitlePargagraphAndImageDT implements Slide
 
     public function build(): Widget
     {
-        return Grid::default()
+        return GridWidget::default()
             ->direction(Direction::Vertical)
             ->constraints(
                 Constraint::percentage(10),
@@ -44,7 +47,7 @@ final class TitlePargagraphAndImageDT implements Slide
                 Constraint::percentage(10),
             )
             ->widgets(
-                Canvas::fromIntBounds(0, 100, 0, 6)
+                CanvasWidget::fromIntBounds(0, 100, 0, 6)
                     ->draw(
                         new TextShape(
                             'default',
@@ -56,7 +59,7 @@ final class TitlePargagraphAndImageDT implements Slide
                         ),
                     ),
                 $this->image(),
-                Block::default()
+                BlockWidget::default()
                     ->padding(Padding::fromScalars(1, 1, 1, 1))
                     ->widget(
                         $this->text(),
@@ -70,7 +73,7 @@ final class TitlePargagraphAndImageDT implements Slide
 
     private function text(): Widget
     {
-        return Paragraph::fromString($this->text)->alignment(HorizontalAlignment::Center);
+        return ParagraphWidget::fromString($this->text)->alignment(HorizontalAlignment::Center);
     }
 
     private function image(): Widget

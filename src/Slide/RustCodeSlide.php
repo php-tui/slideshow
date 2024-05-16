@@ -6,17 +6,20 @@ use PhpTui\Slideshow\Widget\PhpCode;
 use PhpTui\Term\Event;
 use PhpTui\Slideshow\Slide;
 use PhpTui\Slideshow\Tick;
+use PhpTui\Tui\Color\AnsiColor;
 use PhpTui\Tui\Extension\Bdf\Shape\TextShape;
 use PhpTui\Tui\Extension\Core\Widget\Block;
+use PhpTui\Tui\Extension\Core\Widget\BlockWidget;
 use PhpTui\Tui\Extension\Core\Widget\Canvas;
+use PhpTui\Tui\Extension\Core\Widget\CanvasWidget;
 use PhpTui\Tui\Extension\Core\Widget\Grid;
-use PhpTui\Tui\Model\AnsiColor;
-use PhpTui\Tui\Model\Constraint;
-use PhpTui\Tui\Model\Direction;
-use PhpTui\Tui\Model\Widget\Borders;
-use PhpTui\Tui\Model\Widget;
-use PhpTui\Tui\Model\Widget\FloatPosition;
-use PhpTui\Tui\Model\Widget\Title;
+use PhpTui\Tui\Extension\Core\Widget\GridWidget;
+use PhpTui\Tui\Layout\Constraint;
+use PhpTui\Tui\Position\FloatPosition;
+use PhpTui\Tui\Text\Title;
+use PhpTui\Tui\Widget\Borders;
+use PhpTui\Tui\Widget\Direction;
+use PhpTui\Tui\Widget\Widget;
 
 class RustCodeSlide implements Slide
 {
@@ -27,16 +30,16 @@ class RustCodeSlide implements Slide
 
     public function build(): Widget
     {
-        return Grid::default()
+        return GridWidget::default()
             ->constraints(Constraint::length(6), Constraint::min(2))
             ->widgets(
-                Canvas::fromIntBounds(0, 120, 0, 10)
+                CanvasWidget::fromIntBounds(0, 120, 0, 10)
                     ->draw(new TextShape(
                         'default',
                         'Porting Rust Code', AnsiColor::Cyan, FloatPosition::at(2,2)
 
                     )),
-                Grid::default()
+                GridWidget::default()
                     ->direction(Direction::Horizontal)
                     ->constraints(Constraint::percentage(50), Constraint::percentage(50))
                     ->widgets(
@@ -75,7 +78,7 @@ class RustCodeSlide implements Slide
 
     private function code(string $title, string $code): Widget
     {
-        return Block::default()
+        return BlockWidget::default()
             ->titles(Title::fromString($title))
             ->borders(Borders::ALL)
             ->widget(new PhpCode($code));

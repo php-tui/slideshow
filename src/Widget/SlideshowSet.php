@@ -2,7 +2,6 @@
 
 namespace PhpTui\Slideshow\Widget;
 
-use PhpTui\Tui\Model\Canvas\ShapeSet;
 use PhpTui\Tui\Model\WidgetSet;
 
 class SlideshowSet implements WidgetSet

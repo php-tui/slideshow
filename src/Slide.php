@@ -3,7 +3,7 @@
 namespace PhpTui\Slideshow;
 
 use PhpTui\Term\Event;
-use PhpTui\Tui\Model\Widget;
+use PhpTui\Tui\Widget\Widget;
 
 interface Slide
 {
